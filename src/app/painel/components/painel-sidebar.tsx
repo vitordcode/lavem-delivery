@@ -90,7 +90,7 @@ export function PainelSidebar({
 									<SidebarMenuItem key={item.title}>
 										<SidebarMenuButton asChild isActive={pathname === item.url}>
 											<Link href={item.url}>
-												{item.svg}
+												{"svg" in item && item.svg}
 
 												{item.title}
 											</Link>

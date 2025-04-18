@@ -7,7 +7,6 @@ export default async function PerfilPage() {
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
-	console.log(user);
 
 	return (
 		<div className="w-full h-screen flex items-center justify-center">

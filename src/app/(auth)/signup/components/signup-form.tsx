@@ -10,7 +10,6 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 
-import { useState } from "react";
 import { z } from "zod";
 import { signupWithPassword } from "../actions";
 
@@ -40,7 +39,6 @@ export function SignupForm({
 	className,
 	...props
 }: React.ComponentPropsWithoutRef<"form">) {
-	const [isLoading, setIsLoading] = useState(false);
 	const supabase = createClient();
 
 	const {
@@ -56,19 +54,18 @@ export function SignupForm({
 		},
 	});
 
-	const onSubmit = (data: SignupFormData) => {
-		setIsLoading(true);
+	const onSubmit = async (data: SignupFormData) => {
 		const formData = new FormData();
 		formData.append("email", data.email);
 		formData.append("password", data.password);
-		return signupWithPassword(formData).finally(() => setIsLoading(false));
+		return signupWithPassword(formData);
 	};
 
 	const handleSignupWithOAuth = () => {
 		supabase.auth.signInWithOAuth({
 			provider: "google",
 			options: {
-				redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+				redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm`,
 			},
 		});
 	};
@@ -129,14 +126,8 @@ export function SignupForm({
 						</p>
 					)}
 				</div>
-				<Button
-					type="submit"
-					className="w-full"
-					disabled={isSubmitting || isLoading}
-				>
-					{(isSubmitting || isLoading) && (
-						<Loader className="size-4 animate-spin" />
-					)}
+				<Button type="submit" className="w-full" disabled={isSubmitting}>
+					{isSubmitting && <Loader className="size-4 animate-spin" />}
 					Criar conta
 				</Button>
 				<div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">

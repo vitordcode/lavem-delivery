@@ -7,12 +7,13 @@ import { redirect } from "next/navigation";
 export async function signupWithPassword(formData: FormData) {
 	const supabase = await createClient();
 
-	const data = {
+	const { error } = await supabase.auth.signUp({
 		email: formData.get("email") as string,
 		password: formData.get("password") as string,
-	};
-
-	const { error } = await supabase.auth.signUp(data);
+		options: {
+			emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+		},
+	});
 
 	if (error) {
 		console.log(error);
@@ -20,5 +21,5 @@ export async function signupWithPassword(formData: FormData) {
 	}
 
 	revalidatePath("/", "layout");
-	redirect("/confirm");
+	redirect("/ativar-conta");
 }
