@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/utils/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
 import Link from "next/link";
@@ -11,7 +10,6 @@ import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 
 import { z } from "zod";
-import { signupWithPassword } from "../actions";
 
 const signupSchema = z
 	.object({
@@ -39,8 +37,6 @@ export function SignupForm({
 	className,
 	...props
 }: React.ComponentPropsWithoutRef<"form">) {
-	const supabase = createClient();
-
 	const {
 		register,
 		handleSubmit,
@@ -54,28 +50,8 @@ export function SignupForm({
 		},
 	});
 
-	const onSubmit = async (data: SignupFormData) => {
-		const formData = new FormData();
-		formData.append("email", data.email);
-		formData.append("password", data.password);
-		return signupWithPassword(formData);
-	};
-
-	const handleSignupWithOAuth = () => {
-		supabase.auth.signInWithOAuth({
-			provider: "google",
-			options: {
-				redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm`,
-			},
-		});
-	};
-
 	return (
-		<form
-			onSubmit={handleSubmit(onSubmit)}
-			className={cn("flex flex-col gap-6", className)}
-			{...props}
-		>
+		<form className={cn("flex flex-col gap-6", className)} {...props}>
 			<div className="flex flex-col items-center gap-2 text-center">
 				<h1 className="text-2xl font-bold">Criar conta</h1>
 				<p className="text-balance text-sm text-muted-foreground">
@@ -135,11 +111,7 @@ export function SignupForm({
 						ou
 					</span>
 				</div>
-				<Button
-					variant="outline"
-					className="w-full font-medium"
-					onClick={() => handleSignupWithOAuth()}
-				>
+				<Button variant="outline" className="w-full font-medium">
 					<FaGoogle className="size-4" />
 					Entrar com Google
 				</Button>

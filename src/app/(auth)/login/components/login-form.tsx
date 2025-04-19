@@ -3,26 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
-import { loginWithPassword } from "../actions";
 
 export function LoginForm({
 	className,
 	...props
 }: React.ComponentPropsWithoutRef<"form">) {
-	const supabase = createClient();
-
-	const handleSignupWithOAuth = () => {
-		supabase.auth.signInWithOAuth({
-			provider: "google",
-			options: {
-				redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm`,
-			},
-		});
-	};
-
 	return (
 		<div>
 			<form className={cn("flex flex-col gap-6", className)} {...props}>
@@ -35,12 +22,7 @@ export function LoginForm({
 				<div className="grid gap-6">
 					<div className="grid gap-2">
 						<Label htmlFor="email">Email</Label>
-						<Input
-							id="email"
-							type="email"
-							placeholder="jhon@doe.com"
-							required
-						/>
+						<Input id="email" type="email" placeholder="jhon@doe.com" />
 					</div>
 					<div className="grid gap-2">
 						<div className="flex items-center">
@@ -52,18 +34,9 @@ export function LoginForm({
 								Esqueceu sua senha?
 							</Link>
 						</div>
-						<Input
-							id="password"
-							type="password"
-							placeholder="********"
-							required
-						/>
+						<Input id="password" type="password" placeholder="********" />
 					</div>
-					<Button
-						type="submit"
-						className="w-full"
-						formAction={loginWithPassword}
-					>
+					<Button type="submit" className="w-full">
 						Entrar
 					</Button>
 				</div>
@@ -73,11 +46,7 @@ export function LoginForm({
 					ou
 				</span>
 			</div>
-			<Button
-				variant="outline"
-				className="w-full font-medium"
-				onClick={() => handleSignupWithOAuth()}
-			>
+			<Button variant="outline" className="w-full font-medium">
 				<FaGoogle className="size-4" />
 				Entrar com Google
 			</Button>
