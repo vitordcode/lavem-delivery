@@ -6,21 +6,7 @@ import { cn } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/client";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
-import { z } from "zod";
 import { loginWithPassword } from "../actions";
-
-const LoginSchema = z.object({
-	email: z
-		.string()
-		.nonempty("O email é obrigatório")
-		.email("Digite um email válido"),
-	password: z
-		.string()
-		.nonempty("A senha é obrigatória")
-		.min(8, "A senha deve ter pelo menos 8 caracteres"),
-});
-
-type SignupFormData = z.infer<typeof LoginSchema>;
 
 export function LoginForm({
 	className,
@@ -32,7 +18,7 @@ export function LoginForm({
 		supabase.auth.signInWithOAuth({
 			provider: "google",
 			options: {
-				redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+				redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm`,
 			},
 		});
 	};
@@ -92,7 +78,6 @@ export function LoginForm({
 				className="w-full font-medium"
 				onClick={() => handleSignupWithOAuth()}
 			>
-				{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 				<FaGoogle className="size-4" />
 				Entrar com Google
 			</Button>

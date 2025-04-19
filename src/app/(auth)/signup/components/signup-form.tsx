@@ -140,7 +140,6 @@ export function SignupForm({
 					className="w-full font-medium"
 					onClick={() => handleSignupWithOAuth()}
 				>
-					{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 					<FaGoogle className="size-4" />
 					Entrar com Google
 				</Button>
